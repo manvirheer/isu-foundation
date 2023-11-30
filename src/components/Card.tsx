@@ -6,7 +6,7 @@ import { formatDate } from '~/utils'
 
 export default function Card({ post }: { post: Post }) {
   return (
-    <div className="card">
+    <div className="card bg-gray-200">
       {post.mainImage ? (
         <Image
           className="card__cover"

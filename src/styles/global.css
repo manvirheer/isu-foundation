@@ -48,9 +48,21 @@
   --magenta-100: #f9d7eb;
 
   --max-width-0: 320px;
-  --max-width-1: 768px;
+  --max-width-1: 75%;
+}
+@font-face {
+  font-family: 'HedvigSerif';
+  src: url('./fonts/HedvigLettersSerif_14pt-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
+@font-face {
+  font-family: 'HedvigSans';
+  src: url('./fonts/HedvigLettersSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 html {
   background-color: var(--white);
   font-family: var(--font-family-sans), var(--font-family-serif), sans-serif;
@@ -63,6 +75,9 @@ body {
   margin: 0;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* Post page */
 .post {
   width: 100%;
