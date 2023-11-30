@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Switch } from '@headlessui/react'
 
+
 const navigation = [
     { name: 'About', href: '#' },
     { name: 'Gallary', href: '#' },
@@ -13,10 +14,38 @@ const navigation = [
 export default function ContactPageComponent() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [agreed, setAgreed] = useState(false)
-
+    const [result, setResult] = useState('')
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
       }
+
+
+      const onSubmit = async (event) => {
+        event.preventDefault();
+        setResult("Sending...");
+        const formData = new FormData(event.target);
+        formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORM_API_KEY);
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData,
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                console.log("Success:", data);
+                setResult("Form submitted successfully!");
+            } else {
+                console.log("Error:", data);
+                setResult("Failed to submit form.");
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            setResult("An error occurred.");
+        }
+    };
+
       
 
     return (
@@ -126,7 +155,7 @@ export default function ContactPageComponent() {
                             We will get back to you as soon as possible.
                         </p>
                     </div>
-                    <form action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
+                    <form onSubmit={onSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
                         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                             <div>
                                 <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-900">
