@@ -84,7 +84,7 @@ export default function ContactPageComponent() {
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <Link href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                        <Link href="contact" className="text-sm font-semibold leading-6 text-gray-900">
                             Contact Us <span aria-hidden="true">&rarr;</span>
                         </Link>
                     </div>
@@ -125,7 +125,7 @@ export default function ContactPageComponent() {
                                 </div>
                                 <div className="py-6">
                                     <Link
-                                        href="#"
+                                        href="contact"
                                         className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                     >
                                         Contact Us
