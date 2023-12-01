@@ -143,7 +143,7 @@ const EventComponent: React.FC = () => {
         </div>
         <div className="mx-2 max-w-fit py-8 sm:py-48 lg:py-8">
 
-          <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {chunkedImages.map((chunk, index) => (
               <div key={index} className="grid gap-4">
                 {chunk.map((image, index) => (
