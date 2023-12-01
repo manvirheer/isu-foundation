@@ -36,15 +36,6 @@ export interface Post {
   body: PortableTextBlock[]
 }
 
-// Query for fetching 'About' page content
-export const aboutQuery = groq`*[_type == "about"][0]`
-
-// Function to fetch 'About' page content
-export async function getAbout(client: SanityClient): Promise<AboutType> {
-  return await client.fetch(aboutQuery)
-}
-
-// Define an interface for the 'About' page content
 export interface AboutType {
   _type: 'about'
   _id: string
@@ -54,6 +45,38 @@ export interface AboutType {
   createdDate: string
   updatedDate: string
 }
+export interface GalleryItem {
+  _id: string;
+  image: ImageAsset;
+  description?: string;
+}
+
+
+// Query for fetching 'About' page content
+export const aboutQuery = groq`*[_type == "about"][0]`
+
+// Function to fetch 'About' page content
+export async function getAbout(client: SanityClient): Promise<AboutType> {
+  return await client.fetch(aboutQuery)
+}
+
+
+export const galleryItemsQuery = groq`*[_type == "gallery"] | order(_createdAt desc)`;
+
+export async function getGalleryItems(client: SanityClient) {
+  return await client.fetch(galleryItemsQuery);
+}
+
+export const galleryImagesQuery = groq`*[_type == "gallery"].image`;
+
+export async function getGalleryImages(client: SanityClient) {
+  const images = await client.fetch(galleryImagesQuery);
+  return images.map(img => {
+    // Assuming you have a function to generate URLs for images
+    return img ? urlForImage(img).url() : null;
+  }).filter(url => url); // Filter out nulls
+}
+
 
 export const aboutImagesQuery = groq`*[_type == "about"][0]`;
 

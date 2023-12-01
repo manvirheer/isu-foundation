@@ -1,25 +1,54 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import ImageSlider from './ImageSlider'
-import AboutSectionTextContent from './aboutSectionTextContent'
 import Link from 'next/link'
+import { getClient } from '~/lib/sanity.client';
+import { getAboutImages, getGalleryImages } from '~/lib/sanity.queries';
+
 
 const navigation = [
   { name: 'About', href: 'home' },
   { name: 'Gallery', href: 'gallery' },
-  // { name: 'Events', href: '#' },
+  //   { name: 'Events', href: '#' },
 ]
 
-export default function HomePageComponent() {
+const EventComponent: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [images, setImages] = useState([]);
+  const [chunkedImages, setChunkedImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const client = getClient();
+      try {
+        const galleryImages = await getGalleryImages(client);
+        setImages(galleryImages);
+        setChunkedImages(chunkArray(galleryImages, 2));
+        console.log(galleryImages)
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+
+
+  const chunkArray = (arr, chunkSize) => {
+    let result = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      result.push(arr.slice(i, i + chunkSize));
+    }
+    return result;
+  };
 
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <Link href="" className="-m-1.5 p-1.5">
+            <Link href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
                 className="h-8 w-auto"
@@ -55,8 +84,8 @@ export default function HomePageComponent() {
           <div className="fixed inset-0 z-50" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <Link href="" className="-m-1.5 p-1.5">
-                <span className="sr-only">ISU</span>
+              <Link href="#" className="-m-1.5 p-1.5">
+                <span className="sr-only">Your Company</span>
                 <img
                   className="h-8 w-auto"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -87,7 +116,7 @@ export default function HomePageComponent() {
                 </div>
                 <div className="py-6">
                   <Link
-                    href="#"
+                    href="contact"
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Contact Us
@@ -113,52 +142,23 @@ export default function HomePageComponent() {
           />
         </div>
         <div className="mx-2 max-w-fit py-8 sm:py-48 lg:py-8">
-          <ImageSlider />
-        </div>
-        <div className="mx-auto max-w-2xl py-16 sm:py-16 lg:py-16">
-          <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              Announcing our new membership.{' '}
-              <Link href="home" className="font-semibold text-indigo-600">
-                <span className="absolute inset-0" aria-hidden="true" />
-                Read more <span aria-hidden="true">&rarr;</span>
-              </Link>
-            </div>
-          </div>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              International Student Union
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Supporting international students and assisting them in navigating their challenges of starting a new life in Canada.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="#"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Contact Us
-              </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                Learn more <span aria-hidden="true">→</span>
-              </a>
-            </div>
+
+          <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
+            {chunkedImages.map((chunk, index) => (
+              <div key={index} className="grid gap-4">
+                {chunk.map((image, index) => (
+                  <div key={index}>
+                    <img className="h-auto max-w-full rounded-lg" src={image} alt="" />
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
-        <div
-          className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-          aria-hidden="true"
-        >
-          <div
-            className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-            style={{
-              clipPath:
-                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-            }}
-          />
-        </div>
-        <AboutSectionTextContent />
       </div>
     </div>
   )
 }
+
+
+export default EventComponent

@@ -8,7 +8,7 @@ import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import { getPosts, type Post, postsQuery } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
-import HomePage from './home/home'
+import HomePage from './home/index'
 export const getStaticProps: GetStaticProps<
   SharedPageProps & {
     posts: Post[]
